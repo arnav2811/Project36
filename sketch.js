@@ -22,13 +22,13 @@ function setup() {
   dog.addImage(dogImg)
   dog.scale = 0.3
 
-  foodStock = database.ref('Food');
-  foodStock.on("value", readStock)
+  foodStock1 = database.ref('Food');
+  foodStock1.on("value", readStock)
   foodObj = new Food()
   
   feed = createButton("Feed Dog")
   feed.position(800, 35)
-  feed.mousePressed(feedDog)
+  feed.mousePressed(feed1)
 
   addFood = createButton("Add Food")
   addFood.position(900, 35)
@@ -39,6 +39,7 @@ function setup() {
 
 function draw() {  
   background(rgb(46, 139, 87))
+  foodObj.getFoodStock();
   foodObj.display()
   
   fedTime = database.ref('FeedTime');
@@ -62,7 +63,8 @@ function draw() {
 }
 
 function readStock(data){
-  foodS = data.val()
+  foodS = data.val();
+  foodObj.updateFoodStock(foodS);
 }
 function writeStock(x){
 
@@ -84,10 +86,19 @@ database.ref('/').update({
 }
 function feedDog(){
   dog.addImage(dogImg1)
-  foodS -=1 
-  foodObj.updateFoodStock(foodObj.getFoodStock()-1),
+ 
+  //food1 = foodObj.getFoodStock()
+  //console.log(foodObj.getFoodStock())
+  //foodObj.updateFoodStock(food1-1),
   database.ref('/').update({
-    Food: foodObj.getFoodStock(),
+    Food: foodObj.getFoodStock()-1,
     FeedTime: hour()
   })
+   foodObj.getFoodStock();
+  foodObj.display();
+}
+function feed1(){
+  console.log(foodObj.getFoodStock())
+  foodleft = foodObj.getFoodStock() -1;
+  foodObj.deductFood(foodleft);
 }
